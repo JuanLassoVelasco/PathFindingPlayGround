@@ -1,0 +1,40 @@
+﻿<Properties StartupConfiguration="{A33D90CA-0062-222F-7641-AAB7C5AC93CC}|">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Waypoint.cs">
+    <Files>
+      <File FileName="../../Unity Course files!/5_Realm_Rush/Assets/Scripts/PathFinder.cs" Line="1" Column="1" />
+      <File FileName="../../Unity Course files!/5_Realm_Rush/Assets/Scripts/CubeEditor.cs" Line="1" Column="1" />
+      <File FileName="../../Unity Course files!/5_Realm_Rush/Assets/Scripts/WayPoint.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/CubeEditor.cs" Line="21" Column="23" />
+      <File FileName="Assets/Scripts/Waypoint.cs" Line="49" Column="50" />
+      <File FileName="Assets/Scripts/PathFinder.cs" Line="19" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="PathFindingPlayground" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="Waypoint.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="Unity" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="3a1c3071-38dc-4c75-a5fd-c7c5077bfc73" />
+</Properties>
