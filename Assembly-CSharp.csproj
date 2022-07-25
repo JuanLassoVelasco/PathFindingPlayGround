@@ -59,6 +59,7 @@
     <Compile Include="Assets/Scripts/PathFinder.cs" />
     <Compile Include="Assets/Scripts/Waypoint.cs" />
     <Compile Include="Assets/Scripts/CubeEditor.cs" />
+    <Compile Include="Assets/Scripts/DijkstrasPathFinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -6,6 +6,7 @@ public class Waypoint : MonoBehaviour
 {
     public bool isExplored = false;
     public Waypoint exploredFrom;
+    public float exploreWeight;
 
     [SerializeField] Material UnexploredMaterial = null;
     [SerializeField] Material ExploredMaterial = null;
