@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DijkstrasPathFinder : MonoBehaviour
+public class AStarPathFinder : MonoBehaviour
 {
     [SerializeField] Waypoint startNode = null;
     [SerializeField] Waypoint goalNode = null;
@@ -27,6 +27,7 @@ public class DijkstrasPathFinder : MonoBehaviour
         foreach (Waypoint waypoint in waypoints)
         {
             Vector2Int gridPos = waypoint.GetGridPosition();
+            waypoint.toGoalWeight = 0;
             if (grid.ContainsKey(gridPos))
             {
                 Debug.LogWarning("Skipping overlaping block" + waypoint);
@@ -39,6 +40,8 @@ public class DijkstrasPathFinder : MonoBehaviour
         }
     }
 
+
+
     private IEnumerator FindPath()
     {
         Vector2Int startPosition = startNode.GetGridPosition();
@@ -47,6 +50,7 @@ public class DijkstrasPathFinder : MonoBehaviour
         Waypoint currentNode = null; // For drawing path when valid path is found
 
         Queue<Vector2Int> exploreQueue = new Queue<Vector2Int>();
+        List<Waypoint> unexploredNodeList = new List<Waypoint>();
 
         grid[currentPosition].SetExplored();
         startNode.isExplored = true;
@@ -86,8 +90,21 @@ public class DijkstrasPathFinder : MonoBehaviour
 
             Vector2Int[] sideSearchDirections = { up, down, left, right };
             Vector2Int[] diagSearchDirections = { topLeft, topRight, bottomRight, bottomLeft };
-            SearchDirections(goalPosition, currentNode, sideTravelCost, exploreQueue, sideSearchDirections);
-            SearchDirections(goalPosition, currentNode, diagTravelCost, exploreQueue, diagSearchDirections);
+
+            List<Waypoint> newNeighborList = new List<Waypoint>();
+
+            SearchDirections(goalPosition, currentNode, exploreQueue, sideSearchDirections, sideTravelCost, newNeighborList, unexploredNodeList);
+            SearchDirections(goalPosition, currentNode, exploreQueue, diagSearchDirections, diagTravelCost, newNeighborList, unexploredNodeList);
+
+            if (newNeighborList.Count <= 0)
+            {
+                newNeighborList = unexploredNodeList;
+            }
+
+            newNeighborList.Sort(CompareWaypointAStarCost);
+
+            exploreQueue.Enqueue(newNeighborList[0].GetGridPosition());
+            newNeighborList.RemoveAt(0);
 
             currentNode.SetExplored();
             currentNode.isExplored = true;
@@ -111,20 +128,60 @@ public class DijkstrasPathFinder : MonoBehaviour
         }
     }
 
-    private void SearchDirections(Vector2Int goalPosition, Waypoint currentNode, float travelCost, Queue<Vector2Int> exploreQueue, Vector2Int[] sideSearchDirections)
+    private int CompareWaypointAStarCost(Waypoint a, Waypoint b)
     {
-        foreach (Vector2Int searchPosition in sideSearchDirections)
+        int aIsGreater = 1;
+        int bIsGreater = -1;
+        int abEqual = 0;
+
+        float aCost = a.exploreWeight + a.toGoalWeight;
+        float bCost = b.exploreWeight + b.toGoalWeight;
+
+        if (aCost > bCost) {
+            return aIsGreater;
+        }
+        else if (bCost > aCost)
+        {
+            return bIsGreater;
+        }
+        else
+        {
+            return abEqual;
+        }
+    }
+
+    private void SearchDirections(Vector2Int goalPosition, Waypoint currentNode, Queue<Vector2Int> exploreQueue, Vector2Int[] searchDirections, float costToReach, List<Waypoint> newNeighborList, List<Waypoint> unexploredNodeList)
+    {
+        float distanceFromGoal = 0;
+
+        foreach (Vector2Int searchPosition in searchDirections)
         {
             if (grid.ContainsKey(searchPosition) && !grid[searchPosition].isExplored)
             {
                 Waypoint newNeighbor = grid[searchPosition];
                 if (newNeighbor.GetGridPosition() == goalPosition) { goalFound = true; }
 
-                if (!exploreQueue.Contains(searchPosition)) { exploreQueue.Enqueue(searchPosition); }
-
-                if ((currentNode.exploreWeight + travelCost) < newNeighbor.exploreWeight)
+                if (newNeighbor.toGoalWeight == 0)
                 {
-                    newNeighbor.exploreWeight = currentNode.exploreWeight + travelCost;
+                    distanceFromGoal = Vector2Int.Distance(searchPosition, goalPosition);
+                    newNeighbor.toGoalWeight = distanceFromGoal;
+                }
+
+                if (!exploreQueue.Contains(searchPosition))
+                {
+                    Waypoint newNeighborNode = grid[searchPosition];
+
+                    newNeighborList.Add(newNeighborNode);
+
+                    if (!unexploredNodeList.Contains(newNeighborNode))
+                    {
+                        unexploredNodeList.Add(newNeighborNode);
+                    }
+                }
+
+                if ((currentNode.exploreWeight + costToReach) < newNeighbor.exploreWeight)
+                {
+                    newNeighbor.exploreWeight = currentNode.exploreWeight + costToReach;
                     newNeighbor.exploredFrom = currentNode;
                 }
             }

@@ -7,10 +7,11 @@ public class Waypoint : MonoBehaviour
     public bool isExplored = false;
     public Waypoint exploredFrom;
     public float exploreWeight;
+    public float toGoalWeight;
 
-    [SerializeField] Material UnexploredMaterial = null;
-    [SerializeField] Material ExploredMaterial = null;
-    [SerializeField] Material PathMaterial = null;
+    [SerializeField] private Material UnexploredMaterial = null;
+    [SerializeField] private Material ExploredMaterial = null;
+    [SerializeField] private Material PathMaterial = null;
 
     Vector2Int gridPos;
     MeshRenderer waypointRenderer;

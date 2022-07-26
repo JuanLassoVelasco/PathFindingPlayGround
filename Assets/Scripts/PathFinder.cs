@@ -59,19 +59,51 @@ public class PathFinder : MonoBehaviour
             Vector2Int down = currentPosition;
             Vector2Int left = currentPosition;
 
+            Vector2Int topLeft = currentPosition;
+            Vector2Int topRight = currentPosition;
+            Vector2Int bottomRight = currentPosition;
+            Vector2Int bottomLeft = currentPosition;
+
             up.y++;
             right.x++;
             down.y--;
             left.x--;
 
-            Vector2Int[] searchPositions = { up, down, left, right };
+            topLeft.x--;
+            topLeft.y++;
+            topRight.x++;
+            topRight.y++;
+            bottomRight.x++;
+            bottomRight.y--;
+            bottomLeft.x--;
+            bottomLeft.y--;
 
-            foreach (Vector2Int searchPosition in searchPositions)
+            Vector2Int[] sideSearchDirections = { up, down, left, right };
+            Vector2Int[] diagSearchDirections = { topLeft, topRight, bottomRight, bottomLeft };
+
+            foreach (Vector2Int searchPosition in sideSearchDirections)
             {
                 if (grid.ContainsKey(searchPosition) && !grid[searchPosition].isExplored)
                 {
                     Waypoint newNeighbor = grid[searchPosition];
                     if (newNeighbor.GetGridPosition() == goalPosition) {
+                        goalFound = true;
+                    }
+                    exploreQueue.Enqueue(searchPosition);
+                    newNeighbor.SetExplored();
+                    newNeighbor.isExplored = true;
+                    newNeighbor.exploredFrom = grid[currentPosition];
+                    yield return new WaitForSeconds(runSpeedSeconds);
+                }
+            }
+
+            foreach (Vector2Int searchPosition in diagSearchDirections)
+            {
+                if (grid.ContainsKey(searchPosition) && !grid[searchPosition].isExplored)
+                {
+                    Waypoint newNeighbor = grid[searchPosition];
+                    if (newNeighbor.GetGridPosition() == goalPosition)
+                    {
                         goalFound = true;
                     }
                     exploreQueue.Enqueue(searchPosition);
