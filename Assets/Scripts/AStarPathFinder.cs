@@ -146,7 +146,18 @@ public class AStarPathFinder : MonoBehaviour
         }
         else
         {
-            return abEqual;
+            if (a.toGoalWeight > b.toGoalWeight)
+            {
+                return aIsGreater;
+            }
+            else if (b.toGoalWeight > a.toGoalWeight)
+            {
+                return bIsGreater;
+            }
+            else
+            {
+                return abEqual;
+            }
         }
     }
 
